@@ -5,13 +5,17 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
+import { addProduct } from "../redux/cartRedux";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+
 
 const Container = styled.div``;
 
 const Wrapper = styled.div`
 	padding: 50px;
 	display: flex;
-	${mobile({ padding: "10px",flexDirection:"column" })}
+	${mobile({ padding: "10px", flexDirection: "column" })}
 `;
 
 const ImgContainer = styled.div`
@@ -22,13 +26,13 @@ const Image = styled.img`
 	width: 100%;
 	height: 90vh;
 	object-fit: cover;
-	${mobile({height:"40vh" })}
+	${mobile({ height: "40vh" })}
 `;
 
 const InfoContainer = styled.div`
 	flex: 1;
 	padding: 0px 50px;
-	${mobile({padding:"10px" })}
+	${mobile({ padding: "10px" })}
 `;
 
 const Title = styled.h1`
@@ -49,7 +53,7 @@ const FilterContainer = styled.div`
 	margin: 30px 0px;
 	display: flex;
 	justify-content: space-between;
-	${mobile({width:"90%" })}
+	${mobile({ width: "90%" })}
 `;
 
 const Filter = styled.div`
@@ -65,7 +69,7 @@ const FilterTitle = styled.span`
 const FilterColor = styled.div`
 	width: 20px;
 	height: 20px;
-    border: 1px solid lightgray;
+	border: 1px solid lightgray;
 	border-radius: 50%;
 	background-color: ${(props) => props.color};
 	margin: 0px 5px;
@@ -75,7 +79,7 @@ const FilterColor = styled.div`
 const FilterSize = styled.select`
 	margin-left: 10px;
 	padding: 5px;
-	${mobile({margin:" 10px 0px" })}
+	${mobile({ margin: " 10px 0px" })}
 `;
 
 const FilterSizeOption = styled.option``;
@@ -85,7 +89,7 @@ const AddContainer = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	${mobile({width:"90%" })}
+	${mobile({ width: "90%" })}
 `;
 
 const AmountContainer = styled.div`
@@ -117,6 +121,12 @@ const Button = styled.button`
 `;
 
 const Product = () => {
+	// const dispatch = useDispatch();
+
+	// const handleClick = () => {
+	// 	//update cart
+	// 	dispatch(addProduct({ ...product, quantity, color, mark }));
+	// };
 	return (
 		<Container>
 			<Navbar />
@@ -148,17 +158,16 @@ const Product = () => {
 								<FilterSizeOption>XX1</FilterSizeOption>
 								<FilterSizeOption>XX2</FilterSizeOption>
 								<FilterSizeOption>XX3</FilterSizeOption>
-								
 							</FilterSize>
 						</Filter>
 					</FilterContainer>
 					<AddContainer>
 						<AmountContainer>
-							<Remove style={{cursor:"pointer"}}/>
+							<Remove style={{ cursor: "pointer" }} />
 							<Amount>1</Amount>
-							<Add style={{cursor:"pointer"}}/>
+							<Add style={{ cursor: "pointer" }} />
 						</AmountContainer>
-						<Button>ADD TO CART</Button>
+						<Button >ADD TO CART</Button>
 					</AddContainer>
 				</InfoContainer>
 			</Wrapper>
