@@ -5,6 +5,8 @@ import Cart from "./pages/Cart";
 import Home from "./pages/Home";
 import ProductList from "./pages/ProductList";
 import { BrowserRouter, Routes, Route,Navigate } from "react-router-dom";
+import { AddProducts } from "./pages/AddProducts";
+
 
 const App = () => {
 	const user = true
@@ -17,7 +19,7 @@ const App = () => {
 				<Route path="/cart" element={<Cart/>} />
 				<Route path="/login" element={user ? <Navigate  to="/"/> : <Login/>}/>
 				<Route path="/register" element={user ? <Navigate  to="/"/> : <Register/>}/>
-				{/* <Route path="/add-product" element={<AddProduct />} /> */}
+				<Route path="/add-product" element={<AddProducts />} />
 			</Routes>
 		</BrowserRouter>
 	);
