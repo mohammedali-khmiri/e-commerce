@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { storage, fs } from "../config/Config";
+// import { storage, fs } from "../config/Config";
 
 export const AddProducts = () => {
 	const [title, setTitle] = useState("");
@@ -29,47 +29,47 @@ export const AddProducts = () => {
 	};
 
 	const handleAddProducts = (e) => {
-		e.preventDefault();
-		// console.log(title, description, price);
-		// console.log(image);
-		const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
-		uploadTask.on(
-			"state_changed",
-			(snapshot) => {
-				const progress =
-					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-				console.log(progress);
-			},
-			(error) => setUploadError(error.message),
-			() => {
-				storage
-					.ref("product-images")
-					.child(image.name)
-					.getDownloadURL()
-					.then((url) => {
-						fs.collection("Products")
-							.add({
-								title,
-								description,
-								price: Number(price),
-								url,
-							})
-							.then(() => {
-								setSuccessMsg("Product added successfully");
-								setTitle("");
-								setDescription("");
-								setPrice("");
-								document.getElementById("file").value = "";
-								setImageError("");
-								setUploadError("");
-								setTimeout(() => {
-									setSuccessMsg("");
-								}, 3000);
-							})
-							.catch((error) => setUploadError(error.message));
-					});
-			}
-		);
+		// e.preventDefault();
+		// // console.log(title, description, price);
+		// // console.log(image);
+		// const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
+		// uploadTask.on(
+		// 	"state_changed",
+		// 	(snapshot) => {
+		// 		const progress =
+		// 			(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+		// 		console.log(progress);
+		// 	},
+		// 	(error) => setUploadError(error.message),
+		// 	() => {
+		// 		storage
+		// 			.ref("product-images")
+		// 			.child(image.name)
+		// 			.getDownloadURL()
+		// 			.then((url) => {
+		// 				fs.collection("Products")
+		// 					.add({
+		// 						title,
+		// 						description,
+		// 						price: Number(price),
+		// 						url,
+		// 					})
+		// 					.then(() => {
+		// 						setSuccessMsg("Product added successfully");
+		// 						setTitle("");
+		// 						setDescription("");
+		// 						setPrice("");
+		// 						document.getElementById("file").value = "";
+		// 						setImageError("");
+		// 						setUploadError("");
+		// 						setTimeout(() => {
+		// 							setSuccessMsg("");
+		// 						}, 3000);
+		// 					})
+		// 					.catch((error) => setUploadError(error.message));
+		// 			});
+		// 	}
+		// );
 	};
 
 	return (
