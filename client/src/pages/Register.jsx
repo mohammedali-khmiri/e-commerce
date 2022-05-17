@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import React, { useState } from "react";
+import { auth, fs } from "../config/Config";
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
 	width: 100vw;
@@ -14,15 +17,14 @@ const Container = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: right;
-	
 `;
 
 const Wrapper = styled.div`
 	width: 25%;
 	padding: 20px;
 	background-color: white;
-    margin-right: 300px;
-	${mobile({ width: "80%",margin:"auto" })}
+	margin-right: 300px;
+	${mobile({ width: "80%", margin: "auto" })}
 `;
 
 const Title = styled.h1`
@@ -57,23 +59,95 @@ const Button = styled.button`
 `;
 
 const Register = () => {
+
+	const navigate = useNavigate();
+
+	const [fullName, setFullname] = useState("");
+	const [userName, setUsername] = useState("");
+
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+
+	const [errorMsg, setErrorMsg] = useState("");
+	const [successMsg, setSuccessMsg] = useState("");
+
+	const handleSignup = (e) => {
+		e.preventDefault();
+		// console.log(fullName, userName, email, password);
+		auth
+			.createUserWithEmailAndPassword(email, password)
+			.then((credentials) => {
+				console.log(credentials);
+				fs.collection("users")
+					.doc(credentials.user.uid)
+					.set({
+						FullName: fullName,
+						UserName: userName,
+						Email: email,
+						Password: password,
+					})
+					.then(() => {
+						setSuccessMsg(
+							"Signup Successfull. You will now automatically get redirected to Login"
+						);
+						setFullname("");
+						setUsername("");
+						setEmail("");
+						setPassword("");
+						setErrorMsg("");
+						setTimeout(() => {
+							setSuccessMsg("");
+							navigate("/login");
+						}, 3000);
+					})
+					.catch((error) => setErrorMsg(error.message));
+			})
+			.catch((error) => {
+				setErrorMsg(error.message);
+			});
+	};
+
 	return (
 		<Container>
 			<Wrapper>
 				<Title>CREATE AN ACCOUNT</Title>
-				<Form>
-					<Input placeholder="name" />
-					<Input placeholder="last name" />
-					<Input placeholder="username" />
-					<Input placeholder="email" />
-					<Input placeholder="password" />
-					<Input placeholder="confirm password" />
+				<hr></hr>
+            {successMsg&&<>
+                <div className='success-msg'>{successMsg}</div>
+                <br></br>
+            </>}
+				<Form onSubmit={handleSignup}>
+					<Input
+						placeholder="Full name"
+						onChange={(e) => setFullname(e.target.value)}
+						value={fullName}
+					/>
+					<Input
+						placeholder="username"
+						onChange={(e) => setUsername(e.target.value)}
+						value={userName}
+					/>
+					<Input
+						placeholder="email"
+						onChange={(e) => setEmail(e.target.value)}
+						value={email}
+					/>
+					<Input
+						placeholder="password"
+						onChange={(e) => setPassword(e.target.value)}
+						value={password}
+					/>
+
 					<Agreement>
 						By creating an account, I consent to the processing of my personal
 						data in accordance with the <b>PRIVACY POLICY</b>
 					</Agreement>
 					<Button>CREATE</Button>
 				</Form>
+				{errorMsg&&<>
+                <br></br>
+                <div className='error-msg'>{errorMsg}</div>                
+            </>}
 			</Wrapper>
 		</Container>
 	);

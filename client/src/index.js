@@ -5,8 +5,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 // import {Provider} from "react"
 
 ReactDOM.render(
-  <React.StrictMode>
+ 
     <App />
-  </React.StrictMode>,
+ ,
   document.getElementById('root')
 );
