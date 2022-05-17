@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import React, { useState } from "react";
 import { auth, fs } from "../config/Config";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 	width: 100vw;
@@ -59,11 +59,9 @@ const Button = styled.button`
 `;
 
 const Register = () => {
-
 	const navigate = useNavigate();
 
 	const [fullName, setFullname] = useState("");
-	
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -82,7 +80,6 @@ const Register = () => {
 					.doc(credentials.user.uid)
 					.set({
 						FullName: fullName,
-						
 						Email: email,
 						Password: password,
 					})
@@ -91,7 +88,7 @@ const Register = () => {
 							"Signup Successfull. You will now automatically get redirected to Login"
 						);
 						setFullname("");
-						
+
 						setEmail("");
 						setPassword("");
 						setErrorMsg("");
@@ -112,17 +109,19 @@ const Register = () => {
 			<Wrapper>
 				<Title>CREATE AN ACCOUNT</Title>
 				<hr></hr>
-            {successMsg&&<>
-                <div className='alert alert-success'>{successMsg}</div>
-                <br></br>
-            </>}
+				{successMsg && (
+					<>
+						<div className="alert alert-success">{successMsg}</div>
+						<br></br>
+					</>
+				)}
 				<Form onSubmit={handleSignup}>
 					<Input
 						placeholder="Full name"
 						onChange={(e) => setFullname(e.target.value)}
 						value={fullName}
 					/>
-					
+
 					<Input
 						placeholder="email"
 						onChange={(e) => setEmail(e.target.value)}
@@ -138,12 +137,14 @@ const Register = () => {
 						By creating an account, I consent to the processing of my personal
 						data in accordance with the <b>PRIVACY POLICY</b>
 					</Agreement>
-					<Button className='btn btn-success btn-md'>CREATE</Button>
+					<Button className="btn btn-success btn-md">CREATE</Button>
 				</Form>
-				{errorMsg&&<>
-                <br></br>
-                <div className='alert alert-danger'>{errorMsg}</div>                
-            </>}
+				{errorMsg && (
+					<>
+						<br></br>
+						<div className="alert alert-danger">{errorMsg}</div>
+					</>
+				)}
 			</Wrapper>
 		</Container>
 	);

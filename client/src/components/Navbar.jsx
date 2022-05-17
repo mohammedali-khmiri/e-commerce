@@ -101,7 +101,7 @@ const Navbar = ({ user }) => {
 					{!user && (
 						<>
 							<Link to="/register">
-								<MenuItem>REGISTER</MenuItem>
+								<MenuItem >REGISTER</MenuItem>
 							</Link>
 							<Link to="/login">
 								<MenuItem>SIGN IN</MenuItem>
@@ -111,7 +111,7 @@ const Navbar = ({ user }) => {
 
 					{user && (
 						<>
-							<MenuItem>Hello , {user}</MenuItem>
+							<MenuItem >Hello , {user}</MenuItem>
 							<MenuItem>
 								<Badge badgeContent={4} color="primary">
 									<ShoppingCartOutlined />

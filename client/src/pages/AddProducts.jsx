@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import { storage, fs } from "../config/Config";
+import { storage, fs } from "../config/Config";
 
 export const AddProducts = () => {
 	const [title, setTitle] = useState("");
@@ -7,17 +7,22 @@ export const AddProducts = () => {
 	const [price, setPrice] = useState("");
 	const [image, setImage] = useState(null);
 
+	//msg error for type of image
 	const [imageError, setImageError] = useState("");
 
+	//msg error for invalid or failed upload
 	const [successMsg, setSuccessMsg] = useState("");
 	const [uploadError, setUploadError] = useState("");
 
 	const types = ["image/jpg", "image/jpeg", "image/png", "image/PNG"];
 	const handleProductImg = (e) => {
 		let selectedFile = e.target.files[0];
+		//condition if selected file or not
 		if (selectedFile) {
+			//condiction if the type file selected matches these types in array
 			if (selectedFile && types.includes(selectedFile.type)) {
 				setImage(selectedFile);
+				//msg error is empty because we have an file selected
 				setImageError("");
 			} else {
 				setImage(null);
@@ -29,47 +34,52 @@ export const AddProducts = () => {
 	};
 
 	const handleAddProducts = (e) => {
-		// e.preventDefault();
-		// // console.log(title, description, price);
-		// // console.log(image);
-		// const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
-		// uploadTask.on(
-		// 	"state_changed",
-		// 	(snapshot) => {
-		// 		const progress =
-		// 			(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-		// 		console.log(progress);
-		// 	},
-		// 	(error) => setUploadError(error.message),
-		// 	() => {
-		// 		storage
-		// 			.ref("product-images")
-		// 			.child(image.name)
-		// 			.getDownloadURL()
-		// 			.then((url) => {
-		// 				fs.collection("Products")
-		// 					.add({
-		// 						title,
-		// 						description,
-		// 						price: Number(price),
-		// 						url,
-		// 					})
-		// 					.then(() => {
-		// 						setSuccessMsg("Product added successfully");
-		// 						setTitle("");
-		// 						setDescription("");
-		// 						setPrice("");
-		// 						document.getElementById("file").value = "";
-		// 						setImageError("");
-		// 						setUploadError("");
-		// 						setTimeout(() => {
-		// 							setSuccessMsg("");
-		// 						}, 3000);
-		// 					})
-		// 					.catch((error) => setUploadError(error.message));
-		// 			});
-		// 	}
-		// );
+		e.preventDefault();
+
+		// console.log(title, description, price);
+		// console.log(image);
+
+		//stored image in firestore storage
+		const uploadTask = storage.ref(`product-images/${image.name}`).put(image);
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				const progress =
+					(snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				console.log(progress);
+			},
+			(error) => setUploadError(error.message),
+
+			//get the URL od that saved image from firebase storage
+			() => {
+				storage
+					.ref("product-images")
+					.child(image.name)
+					.getDownloadURL()
+					.then((url) => {
+						fs.collection("Products")
+							.add({
+								title,
+								description,
+								price: Number(price),
+								url,
+							})
+							.then(() => {
+								setSuccessMsg("Product added successfully");
+								setTitle("");
+								setDescription("");
+								setPrice("");
+								document.getElementById("file").value = "";
+								setImageError("");
+								setUploadError("");
+								setTimeout(() => {
+									setSuccessMsg("");
+								}, 3000);
+							})
+							.catch((error) => setUploadError(error.message));
+					});
+			}
+		);
 	};
 
 	return (
@@ -80,7 +90,7 @@ export const AddProducts = () => {
 			<hr></hr>
 			{successMsg && (
 				<>
-					<div className="success-msg">{successMsg}</div>
+					<div className="alert alert-success">{successMsg}</div>
 					<br></br>
 				</>
 			)}
@@ -117,6 +127,7 @@ export const AddProducts = () => {
 				></input>
 				<br></br>
 				<label>Upload Product Image</label>
+				<br></br>
 				<input
 					type="file"
 					id="file"
@@ -128,7 +139,7 @@ export const AddProducts = () => {
 				{imageError && (
 					<>
 						<br></br>
-						<div className="error-msg">{imageError}</div>
+						<div className="alert alert-danger">{imageError}</div>
 					</>
 				)}
 				<br></br>
@@ -142,7 +153,7 @@ export const AddProducts = () => {
 			{uploadError && (
 				<>
 					<br></br>
-					<div className="error-msg">{uploadError}</div>
+					<div className="alert alert-danger">{uploadError}</div>
 				</>
 			)}
 		</div>
