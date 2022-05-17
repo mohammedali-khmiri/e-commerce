@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { auth } from "../config/Config";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
 	height: 60px;
@@ -67,11 +69,18 @@ const Right = styled.div`
 const MenuItem = styled.div`
 	font-size: 14px;
 	cursor: pointer;
-	margin: 0px  20px;
+	margin: 0px 20px;
 	${mobile({ fontSize: "12px", margin: "0px 5px" })}
 `;
 
-const Navbar = ({user}) => {
+const Navbar = ({ user }) => {
+	const navigate = useNavigate();
+
+	const handleLogout = () => {
+		auth.signOut().then(() => {
+			navigate("/login");
+		});
+	};
 	// const quantity = useSelector((state) => state.cart.quantity);
 
 	// console.log(quantity);
@@ -89,26 +98,30 @@ const Navbar = ({user}) => {
 					<Logo>EMS.</Logo>
 				</Center>
 				<Right>
-					{!user&&<>
-					<Link to="/register">
-						<MenuItem>REGISTER</MenuItem>
-					</Link>
-					<Link to="/login">
-						<MenuItem>SIGN IN</MenuItem>
-					</Link>
-					</>}
-					
-					{user&&<>
-						<MenuItem >Hello , {user}</MenuItem>
-					<MenuItem>
-						<Badge badgeContent={4} color="primary">
-							<ShoppingCartOutlined />
-						</Badge>
-					</MenuItem>
-					<button class="btn btn-dark">LOGOUT</button>
-					</>}
+					{!user && (
+						<>
+							<Link to="/register">
+								<MenuItem>REGISTER</MenuItem>
+							</Link>
+							<Link to="/login">
+								<MenuItem>SIGN IN</MenuItem>
+							</Link>
+						</>
+					)}
 
-					
+					{user && (
+						<>
+							<MenuItem>Hello , {user}</MenuItem>
+							<MenuItem>
+								<Badge badgeContent={4} color="primary">
+									<ShoppingCartOutlined />
+								</Badge>
+							</MenuItem>
+							<button class="btn btn-outline-dark" onClick={handleLogout}>
+								LogOut
+							</button>
+						</>
+					)}
 				</Right>
 			</Wrapper>
 		</Container>
