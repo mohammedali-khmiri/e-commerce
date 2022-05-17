@@ -50,12 +50,12 @@ const Agreement = styled.span`
 `;
 
 const Button = styled.button`
-	width: 40%;
-	border: none;
-	padding: 15px 20px;
-	background-color: teal;
-	color: white;
-	cursor: pointer;
+	// width: 40%;
+	// border: none;
+	// padding: 15px 20px;
+	// background-color: teal;
+	// color: white;
+	// cursor: pointer;
 `;
 
 const Register = () => {
@@ -63,7 +63,7 @@ const Register = () => {
 	const navigate = useNavigate();
 
 	const [fullName, setFullname] = useState("");
-	const [userName, setUsername] = useState("");
+	
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
@@ -82,7 +82,7 @@ const Register = () => {
 					.doc(credentials.user.uid)
 					.set({
 						FullName: fullName,
-						UserName: userName,
+						
 						Email: email,
 						Password: password,
 					})
@@ -91,7 +91,7 @@ const Register = () => {
 							"Signup Successfull. You will now automatically get redirected to Login"
 						);
 						setFullname("");
-						setUsername("");
+						
 						setEmail("");
 						setPassword("");
 						setErrorMsg("");
@@ -113,7 +113,7 @@ const Register = () => {
 				<Title>CREATE AN ACCOUNT</Title>
 				<hr></hr>
             {successMsg&&<>
-                <div className='success-msg'>{successMsg}</div>
+                <div className='alert alert-success'>{successMsg}</div>
                 <br></br>
             </>}
 				<Form onSubmit={handleSignup}>
@@ -122,11 +122,7 @@ const Register = () => {
 						onChange={(e) => setFullname(e.target.value)}
 						value={fullName}
 					/>
-					<Input
-						placeholder="username"
-						onChange={(e) => setUsername(e.target.value)}
-						value={userName}
-					/>
+					
 					<Input
 						placeholder="email"
 						onChange={(e) => setEmail(e.target.value)}
@@ -142,11 +138,11 @@ const Register = () => {
 						By creating an account, I consent to the processing of my personal
 						data in accordance with the <b>PRIVACY POLICY</b>
 					</Agreement>
-					<Button>CREATE</Button>
+					<Button className='btn btn-success btn-md'>CREATE</Button>
 				</Form>
 				{errorMsg&&<>
                 <br></br>
-                <div className='error-msg'>{errorMsg}</div>                
+                <div className='alert alert-danger'>{errorMsg}</div>                
             </>}
 			</Wrapper>
 		</Container>

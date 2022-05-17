@@ -9,7 +9,7 @@ import { AddProducts } from "./pages/AddProducts";
 
 
 const App = () => {
-	const user = false
+	
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -17,8 +17,8 @@ const App = () => {
 				<Route path="/products/:category" element={<ProductList />} />
 				<Route path="/product/:id" element={<Product/>} />
 				<Route path="/cart" element={<Cart/>} />
-				<Route path="/login" element={user ? <Navigate  to="/"/> : <Login/>}/>
-				<Route path="/register" element={user ? <Navigate  to="/"/> : <Register/>}/>
+				<Route path="/login" element={ <Login/>}/>
+				<Route path="/register" element={ <Register/>}/>
 				<Route path="/add-product" element={<AddProducts />} />
 			</Routes>
 		</BrowserRouter>
