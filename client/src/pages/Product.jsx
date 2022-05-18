@@ -7,8 +7,9 @@ import Newsletter from "../components/Newsletter";
 import { mobile } from "../responsive";
 import { addProduct } from "../redux/cartRedux";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { fs } from "../config/Config";
 
 const Container = styled.div``;
 
@@ -24,8 +25,8 @@ const ImgContainer = styled.div`
 
 const Image = styled.img`
 	width: 100%;
-	height: 90vh;
 	object-fit: cover;
+	
 	${mobile({ height: "40vh" })}
 `;
 
@@ -121,30 +122,33 @@ const Button = styled.button`
 `;
 
 const Product = () => {
-	// const dispatch = useDispatch();
+	const location = useLocation();
+	const id = location.pathname.split("/")[2];
+	const [product, setProduct] = useState({});
 
-	// const handleClick = () => {
-	// 	//update cart
-	// 	dispatch(addProduct({ ...product, quantity, color, mark }));
-	// };
+	useEffect(() => {
+		const getProduct = async () => {
+			fs.collection("Products")
+				.doc(id)
+				.get()
+				.then((snapshot) => setProduct(snapshot.data()));
+		};
+		getProduct();
+	}, [id]);
 	return (
 		<Container>
 			<Navbar />
 
 			<Wrapper>
 				<ImgContainer>
-					<Image src="https://thumbs.dreamstime.com/b/product-icon-collection-trendy-modern-flat-linear-vector-white-background-thin-line-outline-illustration-130947207.jpg" />
+					<Image src={product.url} />
 				</ImgContainer>
 				<InfoContainer>
-					<Title>Denim Jumpsuit</Title>
+					<Title>{product.title}</Title>
 					<Desc>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-						venenatis, dolor in finibus malesuada, lectus ipsum porta nunc, at
-						iaculis arcu nisi sed mauris. Nulla fermentum vestibulum ex, eget
-						tristique tortor pretium ut. Curabitur elit justo, consequat id
-						condimentum ac, volutpat ornare.
+					{product.desc}
 					</Desc>
-					<Price>$ 20</Price>
+					<Price>{product.price}TND</Price>
 					<FilterContainer>
 						<Filter>
 							<FilterTitle>Color</FilterTitle>
@@ -167,7 +171,7 @@ const Product = () => {
 							<Amount>1</Amount>
 							<Add style={{ cursor: "pointer" }} />
 						</AmountContainer>
-						<Button >ADD TO CART</Button>
+						<Button>ADD TO CART</Button>
 					</AddContainer>
 				</InfoContainer>
 			</Wrapper>

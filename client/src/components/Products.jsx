@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { popularProducts } from "../data";
 import Product from "./Product";
+import React from "react";
 
 const Container = styled.div`
 	padding: 20px;
@@ -12,16 +13,11 @@ const Container = styled.div`
 	background-color: #eee;
 	z-index: 1;
 `;
-// const Image = styled.img`
-// 	width: 100%;
-// 	height: 80vh;
-// 	z-index: 0;
-// 	margin-bottom: -150px;
-// 	mask-image: linear-gradient(to bottom, rgb(0, 0, 0, 1), rgba(0, 0, 0, 0.25));
-// `;
-const Products = (cat, filters, sort) => {
-	const [products, setProducts] = useState([]);
-	const [filteredProducts, setFilteredProducts] = useState([]);
+
+const Products = ({ products }) => {
+	// console.log(products);
+	// const [products, setProducts] = useState([]);
+	// const [filteredProducts, setFilteredProducts] = useState([]);
 
 	// useEffect(() => {
 	// 	const getProducts = async () => {
@@ -32,14 +28,14 @@ const Products = (cat, filters, sort) => {
 	// 	};
 	// 	getProducts();
 	// }, [cat]);
+	// console.log(products);
+
 	return (
 		<Container>
-			{/* <Image src="https://cdn.getyourguide.com/img/tour/5e54f4fc1c26f.jpeg/98.jpg" /> */}
-			{popularProducts.map((item) => (
-				<Product item={item} key={item.id} />
+			{products.map((product) => (
+				<Product key={product.ID} product={product} />
 			))}
 		</Container>
 	);
 };
-
 export default Products;

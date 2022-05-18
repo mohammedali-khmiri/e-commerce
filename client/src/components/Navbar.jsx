@@ -66,7 +66,7 @@ const Right = styled.div`
 	${mobile({ flex: 2, justifyContent: "center", marginRight: "15px" })}
 `;
 
-const MenuItem = styled.div`
+const MenuItem = styled.span`
 	font-size: 14px;
 	cursor: pointer;
 	margin: 0px 20px;
@@ -101,7 +101,7 @@ const Navbar = ({ user }) => {
 					{!user && (
 						<>
 							<Link to="/register">
-								<MenuItem >REGISTER</MenuItem>
+								<MenuItem>REGISTER</MenuItem>
 							</Link>
 							<Link to="/login">
 								<MenuItem>SIGN IN</MenuItem>
@@ -111,7 +111,9 @@ const Navbar = ({ user }) => {
 
 					{user && (
 						<>
-							<MenuItem >Hello , {user}</MenuItem>
+							<nav class="navbar navbar-light bg-light">
+								<span class="navbar-brand mb-0 h1">Hello , {user}</span>
+							</nav>
 							<MenuItem>
 								<Badge badgeContent={4} color="primary">
 									<ShoppingCartOutlined />
