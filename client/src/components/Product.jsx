@@ -86,8 +86,14 @@ const Icon = styled.div`
 	}
 `;
 
-const Product = ({ product }) => {
-	console.log(product);
+const Product = ({ product,addToCart }) => {
+	// console.log(product);
+
+	const handleAddToCart = () => {
+		addToCart(product);
+	};
+
+
 	return (
 		<Container>
 			{/* <Circle /> */}
@@ -100,7 +106,7 @@ const Product = ({ product }) => {
 
 			<Info>
 				<Icon>
-					<ShoppingCartOutlined />
+					<ShoppingCartOutlined onClick={handleAddToCart} />
 				</Icon>
 				<Icon>
 					<Link to={`/product/${product.ID}`}>

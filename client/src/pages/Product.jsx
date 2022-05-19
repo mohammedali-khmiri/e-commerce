@@ -26,7 +26,7 @@ const ImgContainer = styled.div`
 const Image = styled.img`
 	width: 100%;
 	object-fit: cover;
-	
+
 	${mobile({ height: "40vh" })}
 `;
 
@@ -121,11 +121,11 @@ const Button = styled.button`
 	}
 `;
 
-const Product = () => {
+const Product = ( addToCart) => {
 	const location = useLocation();
 	const id = location.pathname.split("/")[2];
 	const [product, setProduct] = useState({});
-
+	//getting product by id
 	useEffect(() => {
 		const getProduct = async () => {
 			fs.collection("Products")
@@ -135,6 +135,10 @@ const Product = () => {
 		};
 		getProduct();
 	}, [id]);
+
+	//add to cart function
+	
+
 	return (
 		<Container>
 			<Navbar />
@@ -145,9 +149,7 @@ const Product = () => {
 				</ImgContainer>
 				<InfoContainer>
 					<Title>{product.title}</Title>
-					<Desc>
-					{product.desc}
-					</Desc>
+					<Desc>{product.description}</Desc>
 					<Price>{product.price}TND</Price>
 					<FilterContainer>
 						<Filter>
@@ -171,7 +173,7 @@ const Product = () => {
 							<Amount>1</Amount>
 							<Add style={{ cursor: "pointer" }} />
 						</AmountContainer>
-						<Button>ADD TO CART</Button>
+						<Button >ADD TO CART</Button>
 					</AddContainer>
 				</InfoContainer>
 			</Wrapper>

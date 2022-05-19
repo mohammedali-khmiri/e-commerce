@@ -100,10 +100,10 @@ const Navbar = ({ user }) => {
 				<Right>
 					{!user && (
 						<>
-							<Link to="/register">
+							<Link to="register">
 								<MenuItem>REGISTER</MenuItem>
 							</Link>
-							<Link to="/login">
+							<Link to="login">
 								<MenuItem>SIGN IN</MenuItem>
 							</Link>
 						</>
@@ -116,7 +116,10 @@ const Navbar = ({ user }) => {
 							</nav>
 							<MenuItem>
 								<Badge badgeContent={4} color="primary">
+								<Link to="cart">
 									<ShoppingCartOutlined />
+									</Link>
+									
 								</Badge>
 							</MenuItem>
 							<button class="btn btn-outline-dark" onClick={handleLogout}>

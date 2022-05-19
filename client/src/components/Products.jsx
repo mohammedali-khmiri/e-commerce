@@ -14,7 +14,7 @@ const Container = styled.div`
 	z-index: 1;
 `;
 
-const Products = ({ products }) => {
+const Products = ({ products,addToCart }) => {
 	// console.log(products);
 	// const [products, setProducts] = useState([]);
 	// const [filteredProducts, setFilteredProducts] = useState([]);
@@ -33,7 +33,7 @@ const Products = ({ products }) => {
 	return (
 		<Container>
 			{products.map((product) => (
-				<Product key={product.ID} product={product} />
+				<Product key={product.ID} product={product} addToCart={addToCart} />
 			))}
 		</Container>
 	);

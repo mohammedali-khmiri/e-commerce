@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Announcement from "../components/Announcement";
 import Categories from "../components/Categories";
 import Footer from "../components/Footer";
@@ -7,7 +9,22 @@ import Newsletter from "../components/Newsletter";
 import Products from "../components/Products";
 import { auth, fs } from "../config/Config";
 
-const Home = () => {
+const Home = (props) => {
+	const navigate = useNavigate();
+	//getting current user uid
+	function GetUserUid() {
+		const [uid, setUid] = useState(null);
+		useEffect(() => {
+			auth.onAuthStateChanged((user) => {
+				if (user) {
+					setUid(user.uid);
+				}
+			});
+		}, []);
+		return uid;
+	}
+	const uid = GetUserUid();
+
 	//getting current user function
 	function GetCurrentUser() {
 		const [user, setUser] = useState(null);
@@ -50,30 +67,47 @@ const Home = () => {
 			}
 		}
 	};
-
 	useEffect(() => {
 		getProducts();
 	}, []);
 
+	// add to cart if user is logged in else redirect to login
+	let Product;
+	const addToCart = (product) => {
+		if (uid !== null) {
+			console.log(product);
+			Product = product;
+			Product["quantity"] = 1;
+			Product["TotalProductPrice"] = Product.quantity * Product.price;
+			fs.collection("Cart" + uid)
+				.doc(product.ID)
+				.set(Product)
+				.then(() => {
+					console.log("successfully added to cart");
+				});
+		} else {
+			navigate("/login");
+		}
+	};
+
 	return (
 		<div>
 			<Navbar user={user} />
-			
-			 {products.length > 0 && (
-				<div> 
+
+			{products.length > 0 && (
+				<div>
 					<Announcement />
-					<Products  products={products}/>
+					<Products products={products} addToCart={addToCart} />
 					<Categories />
-				<Newsletter />
-			<Footer />
-			</div>
+					<Newsletter />
+					<Footer />
+				</div>
 			)}
-			{ products.length < 0 && (
-					<div>
+			{products.length < 0 && (
+				<div>
 					<h1>Please wait ....</h1>
 				</div>
-				) }
-		
+			)}
 		</div>
 	);
 };

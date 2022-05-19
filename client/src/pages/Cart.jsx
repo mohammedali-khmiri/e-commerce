@@ -1,8 +1,10 @@
 import { Add, Remove } from "@material-ui/icons";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import { auth, fs } from "../config/Config";
 import { mobile } from "../responsive"; 
 
 const Container = styled.div`
@@ -154,12 +156,60 @@ const Button = styled.button`
   font-weight: 600;
 `;
 
-const Cart = () => {
+const Cart = (cartProduct) => {
+  //getting current user function
+	function GetCurrentUser() {
+		const [user, setUser] = useState(null);
+
+		useEffect(() => {
+			auth.onAuthStateChanged((user) => {
+				if (user) {
+					fs.collection("users")
+						.doc(user.uid)
+						.get()
+						.then((snapshot) => {
+							setUser(snapshot.data().FullName);
+						});
+				} else {
+					setUser(null);
+				}
+			});
+		}, []);
+		return user;
+	}
+	const user = GetCurrentUser();
+	// console.log(user);
+
+  // state of cart products
+  const [cartProducts, setCartProducts]=useState([]);
+
+   // getting cart products from firestore collection and updating the state
+   useEffect(()=>{
+    auth.onAuthStateChanged(user=>{
+        if(user){
+            fs.collection('Cart' + user.uid).onSnapshot(snapshot=>{
+                const newCartProduct = snapshot.docs.map((doc)=>({
+                    ID: doc.id,
+                    ...doc.data(),
+                }));
+                setCartProducts(newCartProduct);  
+                                  
+            })
+            
+        }
+        else{
+            console.log('user is not signed in to retrieve cart');
+        }
+    })
+},[])
+
+console.log(cartProducts);
+
   return (
     <Container>
-      <Navbar />
-      
-      <Wrapper>
+      <Navbar user={user}/>
+      {cartProducts.length > 0 && (
+        <Wrapper>
         <Title>YOUR CART</Title>
         <Top>
           <TopButton>CONTINUE SHOPPING</TopButton>
@@ -171,15 +221,16 @@ const Cart = () => {
         </Top>
         <Bottom>
           <Info>
-            <Product>
+           { cartProducts.map((cartProduct)=>(
+            <Product key={cartProduct.ID} cartProduct={cartProduct} >
               <ProductDetail>
-                <Image src="https://thumbs.dreamstime.com/b/product-icon-collection-trendy-modern-flat-linear-vector-white-background-thin-line-outline-illustration-130947207.jpg" />
+                <Image src={cartProduct.url} />
                 <Details>
                   <ProductName>
-                    <b>Product:</b> PRODUCT 1
+                    <b>Product:</b> {cartProduct.title}
                   </ProductName>
                   <ProductId>
-                    <b>ID:</b> 93813718293
+                    <b>Description:</b> {cartProduct.description}
                   </ProductId>
                   <ProductColor color="black" />
                   <ProductSize>
@@ -190,38 +241,17 @@ const Cart = () => {
               <PriceDetail>
                 <ProductAmountContainer>
                   <Add />
-                  <ProductAmount>2</ProductAmount>
+                  <ProductAmount>{cartProduct.quantity}</ProductAmount>
                   <Remove />
                 </ProductAmountContainer>
-                <ProductPrice>$ 30</ProductPrice>
+                <ProductPrice>{cartProduct.price} TND</ProductPrice>
               </PriceDetail>
+            
             </Product>
-            <Hr />
-            <Product>
-              <ProductDetail>
-                <Image src="https://thumbs.dreamstime.com/b/product-icon-collection-trendy-modern-flat-linear-vector-white-background-thin-line-outline-illustration-130947207.jpg" />
-                <Details>
-                  <ProductName>
-                    <b>Product:</b> PRODUCT 2 
-                  </ProductName>
-                  <ProductId>
-                    <b>ID:</b> 93813718293
-                  </ProductId>
-                  <ProductColor color="gray" />
-                  <ProductSize>
-                    <b>Mark:</b> XX2
-                  </ProductSize>
-                </Details>
-              </ProductDetail>
-              <PriceDetail>
-                <ProductAmountContainer>
-                  <Add />
-                  <ProductAmount>1</ProductAmount>
-                  <Remove />
-                </ProductAmountContainer>
-                <ProductPrice>$ 20</ProductPrice>
-              </PriceDetail>
-            </Product>
+            
+            ))}
+              <Hr/>
+            
           </Info>
           <Summary>
             <SummaryTitle>ORDER SUMMARY</SummaryTitle>
@@ -239,12 +269,19 @@ const Cart = () => {
             </SummaryItem>
             <SummaryItem type="total">
               <SummaryItemText>Total</SummaryItemText>
-              <SummaryItemPrice>$ 80</SummaryItemPrice>
+              <SummaryItemPrice>{cartProduct.TotalProductPrice}</SummaryItemPrice>
             </SummaryItem>
             <Button >CHECKOUT NOW</Button>
           </Summary>
         </Bottom>
       </Wrapper>
+      )}
+       {cartProducts.length < 1 && (
+         
+         <div class="container-fluid">
+         <h1 class="display-4">No products to show</h1>
+       </div>
+            ) }
       <Footer />
     </Container>
   );
