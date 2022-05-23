@@ -106,6 +106,7 @@ const Navbar = ({ user }) => {
 							<Link to="login">
 								<MenuItem>SIGN IN</MenuItem>
 							</Link>
+							
 						</>
 					)}
 

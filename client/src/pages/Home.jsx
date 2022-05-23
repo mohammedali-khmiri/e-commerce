@@ -47,7 +47,7 @@ const Home = (props) => {
 	}
 
 	const user = GetCurrentUser();
-	// console.log(user);
+	console.log(user);
 
 	// state of products
 	const [products, setProducts] = useState([]);
